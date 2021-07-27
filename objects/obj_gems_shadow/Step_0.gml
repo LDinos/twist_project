@@ -12,3 +12,6 @@ if (physics_allowed) && (!dying)
 	}
 	else y += current_speed
 }
+
+if (xoffset != 0) xoffset -= sign(xoffset)
+if (yoffset != 0) yoffset -= sign(yoffset)

@@ -4,6 +4,7 @@ function gem_die(){
 	if !dying global.gems_dying++
 	var i = (y - obj_board.y) div GEM_SIZE
 	var j = (x - obj_board.x) div GEM_SIZE
+	if (shake_nearby_gems) {shake_gems_around_me(i,j)}
 	global.board[i][j] = noone
 	image_xscale += 0.1
 	image_yscale += 0.1

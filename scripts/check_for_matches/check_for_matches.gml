@@ -30,7 +30,7 @@ function check_for_matches(){
 					gems_matched[array_length(gems_matched)] = global.board[i][k]
 					global.board[i][k].got_matched = true
 				}
-				ds_list_add(gems_to_kill,gems_matched)
+				ds_list_add(gems_to_kill,gems_matched) //array into a list
 				n = 1
 			}
 			if (j==7) n = 1 //reset n value at the end of the loop
@@ -57,7 +57,7 @@ function check_for_matches(){
 						global.board[k][i].got_matched = true
 					}
 				}
-				ds_list_add(gems_to_kill,gems_matched)
+				ds_list_add(gems_to_kill,gems_matched) //array into a list
 				n = 1
 			}
 			if (j==7) n = 1 //reset n value at the end of the loop
@@ -67,11 +67,28 @@ function check_for_matches(){
 	for(var j = 0; j < ds_list_size(gems_to_kill); j++)
 	{
 		var gem_set = gems_to_kill[| j]
-		if (j = 0){for(var i = 0; i < array_length(gem_set); i++) with(gem_set[i]) gem_die()}
-		else {for(var i = 0; i < array_length(gem_set); i++) with(gem_set[i]) gem_die_later()}
+		if (j = 0) {
+			for(var i = 0; i < array_length(gem_set); i++) with(gem_set[i]) {
+					if (global.cascades > 1) shake_nearby_gems = true
+					gem_die()
+				}
+			}
+		else {
+			for(var i = 0; i < array_length(gem_set); i++) with(gem_set[i]) {
+					if (global.cascades > 1) shake_nearby_gems = true
+					gem_die_later()
+				}
+			}
 	}
 	
 	var ret = ds_list_size(gems_to_kill) //did we do any matches?
-	ds_list_destroy(gems_to_kill)
+	if( ret > 0) {
+		if (ret > 1) audio_play_sound(snd_doubleset,0,false) //if we did more than 2, play a unique sfx
+		var cascade_sound = asset_get_index("snd_cascade" + string(clamp(global.cascades++, 1, 6))) 
+		audio_play_sound(cascade_sound,0,false)
+	}
+	
+	ds_list_destroy(gems_to_kill) //dynamic list cleanup
+
 	return ret;
 }

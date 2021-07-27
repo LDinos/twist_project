@@ -1,1 +1,2 @@
 #macro GEM_SIZE 64
+#macro GEM_SHAKE_VAL 3
